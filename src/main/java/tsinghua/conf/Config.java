@@ -23,6 +23,7 @@ public class Config {
 	public String port="2181";
 	public String TOPIC="test2";
 	public long LOOP = 100;
+	public String TIME_FORMAT="long";
 	public String BROKER_LIST="192.168.130.16:9092";
 
 	/** 设备数量 */

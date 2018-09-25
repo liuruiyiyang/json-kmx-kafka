@@ -84,15 +84,10 @@ public class KProducer extends Thread {
      * 日期格式转换yyyy-MM-dd'T'HH:mm:ss.SSSXXX  (yyyy-MM-dd'T'HH:mm:ss.SSSZ) TO  yyyy-MM-dd HH:mm:ss
      * @throws ParseException
      */
-    public static String dealDateFormat(String oldDateStr) throws ParseException {
-        //此格式只有  jdk 1.7才支持  yyyy-MM-dd'T'HH:mm:ss.SSSXXX
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");//yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        Date date = df.parse(oldDateStr);
-        SimpleDateFormat df1 = new SimpleDateFormat ("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK);
-        Date date1 =  df1.parse(date.toString());
-        DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    //  Date date3 =  df2.parse(date1.toString());
-        return df2.format(date1);
+    public String dealDateFormat(long timestamp) throws ParseException {
+        Date date = new Date(timestamp);
+        DateFormat df = new SimpleDateFormat(config.TIME_FORMAT);//yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        return df.format(date);
     }
 
     private String generateJSON(String tenant, String user, String tsTable, long loopIndex, long dataIndex) {
@@ -103,8 +98,17 @@ public class KProducer extends Thread {
         insertMap.put(TSTABLE, tsTable);
         //long currentTime = Constants.START_TIMESTAMP + config.POINT_STEP * (loopIndex * config.CACHE_NUM + dataIndex);
         long currentTime = Constants.START_TIMESTAMP + config.POINT_STEP * loopIndex ;
-
-        insertMap.put(TIMESTAMP, currentTime);
+        if(config.TIME_FORMAT.equals("long")){
+            insertMap.put(TIMESTAMP, currentTime);
+        } else {
+            try {
+                String timeString = dealDateFormat(currentTime);
+                insertMap.put(TIMESTAMP, timeString);
+            } catch (ParseException e) {
+                logger.error("时间戳格式转换失败");
+                e.printStackTrace();
+            }
+        }
         insertMap.put(TAGS, tagMap);
 
         for (String sensor : config.SENSOR_CODES) {

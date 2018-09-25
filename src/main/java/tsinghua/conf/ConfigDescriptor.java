@@ -125,6 +125,8 @@ public class ConfigDescriptor {
 				config.CREATE_SCHEMA = Boolean.parseBoolean(properties.getProperty("CREATE_SCHEMA", config.CREATE_SCHEMA+""));
 				config.TOPIC = properties.getProperty("TOPIC", config.TOPIC);
 				config.BROKER_LIST = properties.getProperty("BROKER_LIST", config.BROKER_LIST);
+				config.TIME_FORMAT = properties.getProperty("TIME_FORMAT", config.TIME_FORMAT);
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
