@@ -54,7 +54,7 @@ public class KProducer extends Thread {
             String insertionJSON = generateJSON("myTenant", "user1", "performf.group_0", i, 0);
             producer.send(new KeyedMessage<Integer, String>(topic, insertionJSON));
             try {
-                TimeUnit.MILLISECONDS.sleep(config.POINT_STEP);
+                TimeUnit.MILLISECONDS.sleep(config.DELAY);
             } catch (InterruptedException e){
                 e.printStackTrace();
             }

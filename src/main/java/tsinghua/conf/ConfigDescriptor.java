@@ -126,6 +126,7 @@ public class ConfigDescriptor {
 				config.TOPIC = properties.getProperty("TOPIC", config.TOPIC);
 				config.BROKER_LIST = properties.getProperty("BROKER_LIST", config.BROKER_LIST);
 				config.TIME_FORMAT = properties.getProperty("TIME_FORMAT", config.TIME_FORMAT);
+				config.DELAY = Long.parseLong(properties.getProperty("DELAY", config.DELAY+""));
 
 			} catch (IOException e) {
 				e.printStackTrace();
